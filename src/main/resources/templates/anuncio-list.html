@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallapop</title>
+    <link th:href="@{/css/styleGeneral.css}" rel="stylesheet">
+</head>
+<body>
+
+<header>
+    <h1>Wallapop</h1>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="/anuncios">Todos los anuncios</a></li>
+        <li><a href="/mis-anuncios">Mis anuncios</a></li>
+        <li>
+            <th:block sec:authorize="isAnonymous()">
+                <form th:action="@{/login}" method="post" class="login-form">
+                    <input type="text" name="username" placeholder="Username" required />
+                    <input type="password" name="password" placeholder="Password" required />
+                    <input type="submit" value="Log in" />
+                </form>
+                <p><a th:href="@{/register}">¿No tienes una cuenta?</a></p>
+            </th:block>
+
+            <th:block sec:authorize="isAuthenticated()">
+                <div id="login">
+                    Bienvenido <span sec:authentication="name"></span>
+                    <a href="#" id="logoutEnlace" onclick="document.getElementById('formLogOut').submit()">Cerrar Sesión</a>
+                    <form th:action="@{/logout}" method="post" id="formLogOut" style="display: none;"></form>
+                </div>
+            </th:block>
+        </li>
+        <li>
+            <a th:href="@{/anuncios/new}" class="botonVenta">Vender</a>
+        </li>
+    </ul>
+</nav>
+
+<div id="productos" class="container">
+    <p th:if="${#lists.isEmpty(anuncios)}">No hay anuncios disponibles.</p>
+    <ul>
+        <li th:each="anuncio : ${anuncios}">
+            <a th:href="@{'/anuncio/view/' + ${anuncio.id}}" style="text-decoration: none; color: inherit;">
+                <div class="anuncio">
+                    <img th:if="${#lists.size(anuncio.fotos) > 0}" th:src="@{'/imagesAnuncios/' + ${anuncio.fotos.get(0).nombre}}" alt="Imagen del anuncio">
+                    <h3 th:text="${anuncio.precio} + ' EUR'"></h3>
+                    <h4 th:text="${anuncio.titulo}"></h4>
+                    <p th:text="${anuncio.descripcion}"></p>
+                </div>
+            </a>
+        </li>
+    </ul>
+    <p style="text-align: center !important;">Total de anuncios: <span th:text="${#lists.size(anuncios)}"></span></p>
+</div>
+
+</body>
+</html>

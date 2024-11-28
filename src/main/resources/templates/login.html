@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <title>Formulario</title>
+  <link th:href="@{/css/styleAuth.css}" rel="stylesheet">
+</head>
+<body>
+
+<div class="form-container">
+  <h1>Inicia sesión</h1>
+
+  <!-- Mensajes de error si los hay -->
+  <div th:if="${param.error}" class="error-message">Usuario o contraseña no válidos.</div>
+  <div th:if="${param.logout}" class="error-message">You have been logged out.</div>
+
+  <!-- Formulario de login -->
+  <form th:action="@{/login}" method="post">
+    <div>
+      <input type="text" name="username" placeholder="Username" />
+    </div>
+    <div>
+      <input type="password" name="password" placeholder="Password" />
+    </div>
+    <input type="submit" value="Log in" />
+  </form>
+</div>
+
+</body>
+</html>
